@@ -182,12 +182,33 @@ export function renderWhitespaceSvg({
       .join('');
   }
 
-  // Label top 8 largest markets + top 6 whitespace markets without heavy overlap
-  const labelCodes = new Set([
-    ...usable.slice(0, 7).map((m) => m.code),
-    ...usable.filter((m) => m.usSharePct <= maxUsShare).slice(0, 6).map((m) => m.code),
-  ]);
-  if (selectedCode) labelCodes.add(selectedCode);
+  // Greedy bounding-box collision avoidance for crisp, non-overlapping labels
+  const placedBoxes = [];
+  const labelPriority = [...usable].sort((a, b) => {
+    if (a.code === selectedCode) return -1;
+    if (b.code === selectedCode) return 1;
+    return b.world2024 - a.world2024;
+  });
+  const visibleLabels = new Set();
+
+  for (const m of labelPriority) {
+    if (visibleLabels.size >= 11 && m.code !== selectedCode) continue;
+    const cx = xScale(m);
+    const cy = yScale(m.usSharePct);
+    const r = rScale(m.world2024);
+    const w = Math.max(36, m.name.length * 6.4);
+    const h = 14;
+    const bx = cx - w / 2;
+    const by = cy - r - h - 3;
+
+    const collides = placedBoxes.some(
+      (p) => !(bx + w + 4 < p.x || bx > p.x + p.w + 4 || by + h + 2 < p.y || by > p.y + p.h + 2)
+    );
+    if (!collides || m.code === selectedCode) {
+      visibleLabels.add(m.code);
+      placedBoxes.push({ x: bx, y: by, w, h });
+    }
+  }
 
   const bubbles = usable
     .map((m) => {
@@ -201,8 +222,8 @@ export function renderWhitespaceSvg({
       const stroke = isSelected ? '#0b1226' : isWhitespace ? '#935a08' : '#151b2e';
       const strokeW = isSelected ? 2.8 : 1.25;
 
-      const labelHtml = labelCodes.has(m.code)
-        ? `<text x="${cx.toFixed(1)}" y="${(cy - r - 5).toFixed(1)}" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="${isSelected ? '600' : '500'}" fill="#151b2e" pointer-events="none">${esc(m.name)}</text>`
+      const labelHtml = visibleLabels.has(m.code)
+        ? `<text x="${cx.toFixed(1)}" y="${(cy - r - 5).toFixed(1)}" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="${isSelected ? '600' : '500'}" fill="#151b2e" stroke="#ffffff" stroke-width="3" paint-order="stroke" pointer-events="none">${esc(m.name)}</text>`
         : '';
 
       return `
@@ -226,7 +247,7 @@ export function renderWhitespaceSvg({
       <rect width="${W}" height="${H}" fill="#ffffff" rx="8" />
       <rect x="${zoneX.toFixed(1)}" y="${zoneY.toFixed(1)}" width="${zoneW.toFixed(1)}" height="${zoneH.toFixed(1)}" fill="#f7e9cf" opacity="0.58" />
       <line x1="${pad.left}" y1="${zoneY.toFixed(1)}" x2="${W - pad.right}" y2="${zoneY.toFixed(1)}" stroke="#e0982c" stroke-width="1.3" stroke-dasharray="5 4" />
-      <text x="${(W - pad.right - 8).toFixed(1)}" y="${(zoneY + 16).toFixed(1)}" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="500" fill="#935a08">WHITESPACE ZONE (U.S. SHARE ≤ ${maxUsShare}%)</text>
+      <text x="${(pad.left + 8).toFixed(1)}" y="${(zoneY - 6).toFixed(1)}" text-anchor="start" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="500" fill="#935a08">WHITESPACE CEILING (U.S. SHARE ≤ ${maxUsShare}%)</text>
       ${xTicksHtml}
       ${yGrid}
       <text x="${(pad.left + plotW / 2).toFixed(1)}" y="${H - 7}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#4a5470">${esc(xAxisTitle)}</text>
