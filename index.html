@@ -4,22 +4,145 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>U.S. Ag Export Scorecard &amp; Whitespace Finder | Duess Strategies</title>
+    <title>U.S. Ag Export Scorecard &amp; Untapped Markets | Duess Strategies</title>
     <meta
       name="description"
-      content="Instant U.S. agricultural export scorecards, customs district breakdowns, and global whitespace market finder for USDA FAS cooperators. Official U.S. Census and UN ComTrade data, zero login."
+      content="Free U.S. agricultural export scorecard and untapped import market finder for USDA FAS cooperators and USAEDC members. Official U.S. Census and UN ComTrade data for 24 commodities, zero login."
     />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="U.S. Ag Export Scorecard & Whitespace Finder | trade.duess.com" />
+    <meta property="og:site_name" content="Duess Strategies" />
+    <meta property="og:title" content="U.S. Ag Export Scorecard & Untapped Markets | trade.duess.com" />
     <meta
       property="og:description"
-      content="5-year U.S. ag export trends, top 10 destinations, port breakdowns, and global market share gaps for 24 cooperator commodities. Instant load, zero login."
+      content="5-year U.S. ag export trends, YTD momentum, top destinations, U.S. customs districts, and untapped global import markets for 24 cooperator commodities. Instant load, zero login."
     />
     <meta property="og:url" content="https://trade.duess.com/" />
+    <meta property="og:image" content="https://duess.com/images/og-default.jpg" />
+    <meta property="og:image:width" content="2400" />
+    <meta property="og:image:height" content="1260" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="U.S. Ag Export Scorecard & Untapped Markets | trade.duess.com" />
+    <meta
+      name="twitter:description"
+      content="Instant 5-year U.S. ag export scorecards and untapped global import markets for 24 USDA FAS cooperator commodities. Official Census and UN ComTrade data."
+    />
+    <meta name="twitter:image" content="https://duess.com/images/og-default.jpg" />
     <link rel="canonical" href="https://trade.duess.com/" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebApplication",
+            "name": "U.S. Ag Export Scorecard & Untapped Markets",
+            "url": "https://trade.duess.com/",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "All",
+            "isAccessibleForFree": true,
+            "description": "Free interactive U.S. agricultural export scorecard and untapped global import market finder built for USDA FAS cooperators, USAEDC members, and U.S. food and agricultural exporters.",
+            "creator": {
+              "@type": "Person",
+              "name": "Andreas Duess",
+              "url": "https://duess.com/about/"
+            },
+            "publisher": {
+              "@type": "Organization",
+              "name": "Duess Strategies Inc.",
+              "url": "https://duess.com/"
+            }
+          },
+          {
+            "@type": "Dataset",
+            "name": "U.S. Agricultural Export & Global Import Market Dataset (24 Cooperator Commodities)",
+            "description": "Pre-aggregated 2021-2026 U.S. agricultural export values by destination and U.S. customs district from the U.S. Census Bureau International Trade API, paired with 2020 and 2024 global import demand and rival exporter shares from UN ComTrade.",
+            "url": "https://trade.duess.com/",
+            "isAccessibleForFree": true,
+            "creator": {
+              "@type": "Organization",
+              "name": "Duess Strategies Inc.",
+              "url": "https://duess.com/"
+            },
+            "keywords": [
+              "USDA FAS",
+              "USAEDC",
+              "U.S. agricultural exports",
+              "GATS alternative",
+              "UN ComTrade",
+              "U.S. Census International Trade",
+              "MAP",
+              "FMD",
+              "RAPP",
+              "UES reporting"
+            ]
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "How does trade.duess.com compare to USDA FAS GATS?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "trade.duess.com pulls from the same official U.S. Census Bureau International Trade API that feeds USDA FAS GATS, plus UN ComTrade for global import demand and rival exporter shares. Instead of building multi-step GATS queries, you pick a commodity preset and immediately get 5-year trends, YTD momentum, top destinations, customs districts, and untapped global markets."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What commodities are included in the U.S. Ag Export Scorecard?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "The scorecard covers 24 curated USAEDC cooperator commodity baskets across tree nuts, meat and livestock, dairy, grains and oilseeds, specialty crops, wine, seafood, pet food, cotton, pulses, peanuts, and forestry products. Email andreas@duess.com to request an additional HS4 or HS6 basket."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What does the Untapped Markets tab show?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "The Untapped Markets tab plots major importing countries by 2024 global import value (or 4-year growth) against current U.S. market share from UN ComTrade. Countries in the lower-right zone are large or fast-growing import markets where U.S. share sits below your chosen threshold (such as 15%), alongside the top rival exporting nations currently supplying that commodity."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How do I use these numbers in a UES narrative or board deck?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Click Copy table for PowerPoint / UES to copy clean tab-separated columns that paste straight into PowerPoint, Excel, or Word. You can also download full CSV files or export the 5-year trend chart as a crisp SVG graphic. Always verify final figures against official USDA FAS or Census records before filing federal grant submissions."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Can I send a direct link to a specific commodity or destination?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. Every commodity, destination country filter, and tab updates the browser URL automatically (for example, https://trade.duess.com/?commodity=almonds or https://trade.duess.com/?commodity=walnuts&tab=whitespace), so you can send a direct pre-filtered link to your board, staff, or committee members."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is trade.duess.com free to use and does it require a login?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. It is 100% free for USAEDC members, FAS cooperators, state regional trade groups, and agricultural exporters, with zero login, no paywalls, and no tracking scripts."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="app"></div>
+    <noscript>
+      <main style="max-width: 780px; margin: 2rem auto; padding: 0 1.25rem; font-family: sans-serif; line-height: 1.6;">
+        <h1>U.S. Ag Export Scorecard &amp; Untapped Markets</h1>
+        <p>Free U.S. agricultural export scorecard and untapped global import market finder built for USDA FAS cooperators and USAEDC members by Duess Strategies Inc. Powered by official U.S. Census Bureau International Trade data (2021-2026) and UN ComTrade (2020 and 2024).</p>
+        <h2>24 Covered Cooperator Commodities</h2>
+        <p>Almonds, Walnuts, Pistachios, Pecans, Beef &amp; Beef Offal, Pork, Poultry, Dairy Products, Soybeans, Corn (Maize), Wheat, Rice, Sorghum, Pulses (Dry Peas &amp; Lentils), Peanuts, Apples &amp; Pears, Table Grapes, Wine, Cotton, Hardwood Lumber, Softwood Lumber, Dog &amp; Cat Food, Bovine Genetics (Semen), and Cranberries &amp; Blueberries.</p>
+        <p>Enable JavaScript to explore interactive 5-year export charts, customs district breakdowns, and untapped import market scatter plots, or visit <a href="https://duess.com/for-usaedc-members/">duess.com/for-usaedc-members/</a>.</p>
+      </main>
+    </noscript>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

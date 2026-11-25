@@ -599,6 +599,39 @@ function render() {
                   : renderWhitespaceTab(state.data)
           }
         </div>
+
+        <section class="faq-section" aria-labelledby="faq-heading">
+          <div class="faq-head">
+            <p class="eyebrow"><span class="dash" aria-hidden="true"></span>Common questions</p>
+            <h2 id="faq-heading">Frequently asked questions</h2>
+          </div>
+          <div class="faq-list">
+            <details class="faq-item" open>
+              <summary>How does trade.duess.com compare to USDA FAS GATS?</summary>
+              <p>trade.duess.com pulls from the same official U.S. Census Bureau International Trade API that feeds USDA FAS GATS, plus UN ComTrade for global import demand and rival exporter shares. Instead of building multi-step GATS queries, you pick a commodity preset and immediately get 5-year trends, YTD momentum, top destinations, U.S. customs districts, and untapped global markets.</p>
+            </details>
+            <details class="faq-item">
+              <summary>What commodities are included in the U.S. Ag Export Scorecard?</summary>
+              <p>The scorecard covers 24 curated USAEDC cooperator commodity baskets across tree nuts, meat and livestock, dairy, grains and oilseeds, specialty crops, wine, pet food, cotton, pulses, peanuts, genetics, and forestry products. Email <a href="mailto:andreas@duess.com">andreas@duess.com</a> to request an additional HS4 or HS6 basket.</p>
+            </details>
+            <details class="faq-item">
+              <summary>What does the Untapped Markets tab show?</summary>
+              <p>The Untapped Markets tab plots major importing countries by 2024 global import value (or 4-year growth) against current U.S. market share from UN ComTrade. Countries in the shaded lower-right zone are large or fast-growing import markets where U.S. share sits below your chosen ceiling, paired with the top global rival exporters currently supplying that commodity.</p>
+            </details>
+            <details class="faq-item">
+              <summary>How do I use these numbers in a UES narrative or board deck?</summary>
+              <p>Click <strong>Copy table for PowerPoint / UES</strong> to copy clean tab-separated columns that paste straight into PowerPoint, Excel, or Word. You can also download full CSV files or export the 5-year trend chart as a crisp SVG graphic. Always verify final figures against official USDA FAS or Census records before filing federal grant submissions.</p>
+            </details>
+            <details class="faq-item">
+              <summary>Can I send a direct link to a specific commodity or destination?</summary>
+              <p>Yes. Every commodity, destination country filter, and tab updates the browser URL automatically (such as <code>trade.duess.com/?commodity=almonds</code> or <code>trade.duess.com/?commodity=walnuts&amp;tab=whitespace</code>), so you can send a direct pre-filtered link to your board, staff, or committee members.</p>
+            </details>
+            <details class="faq-item">
+              <summary>Is trade.duess.com free to use and does it require a login?</summary>
+              <p>Yes. It is 100% free for USAEDC members, FAS cooperators, state regional trade groups, and agricultural exporters, with zero login, no paywalls, and no tracking scripts.</p>
+            </details>
+          </div>
+        </section>
       </div>
     </main>
 
@@ -607,6 +640,7 @@ function render() {
         <div class="footer-top">
           <div class="footer-links">
             <a href="https://duess.com/for-usaedc-members/" target="_blank" rel="noopener">AI for FAS Cooperators</a>
+            <a href="https://events.duess.com/" target="_blank" rel="noopener">Global Ag Trade Show Map</a>
             <a href="https://ues-checker.duess.com/" target="_blank" rel="noopener">UES Copy-Forward Checker</a>
             <a href="https://duess.com/ai-policy/#fas" target="_blank" rel="noopener">One-Page FAS AI Policy</a>
           </div>

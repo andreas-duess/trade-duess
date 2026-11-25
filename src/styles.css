@@ -1041,3 +1041,79 @@ table.data-table tbody tr.is-selected {
   .workspace-band { background: #fff !important; padding: 0 !important; }
   .card { border: 0 !important; padding: 0 !important; }
 }
+
+/* FAQ Section */
+.faq-section {
+  margin-top: 2.5rem;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  padding: 2rem clamp(1.25rem, 2.5vw, 2.5rem);
+}
+
+.faq-head {
+  margin-bottom: 1.25rem;
+}
+
+.faq-head h2 {
+  margin: 0.25rem 0 0;
+  font-size: var(--d3);
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.faq-item {
+  border-top: 1px solid var(--line);
+}
+
+.faq-item:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.faq-item summary {
+  padding: 1rem 0;
+  font-weight: 600;
+  font-size: var(--t-md);
+  color: var(--ink);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item summary::after {
+  content: '+';
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  color: var(--amber-deep);
+  flex: none;
+}
+
+.faq-item[open] summary::after {
+  content: '−';
+}
+
+.faq-item p {
+  margin: 0 0 1.15rem;
+  max-width: 72ch;
+  font-size: var(--t-sm);
+  line-height: 1.65;
+  color: var(--ink-soft);
+}
+
+.faq-item code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--surface);
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+}
