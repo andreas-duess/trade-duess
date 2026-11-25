@@ -379,14 +379,27 @@ function renderWhitespaceTab(data) {
     </div>
 
     <div class="ws-grid">
-      <div class="chart-frame">${chartSvg}</div>
+      <div class="chart-frame chart-frame-ws" id="ws-chart-frame">
+        ${chartSvg}
+        <div class="chart-tooltip" id="ws-tooltip" hidden></div>
+      </div>
 
       <aside class="detail-card">
+        <p class="eyebrow"><span class="dash" aria-hidden="true"></span>Selected import market</p>
+        <div class="market-picker">
+          <select aria-label="Select import market" data-select="whitespaceMarket">
+            ${[...markets]
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map(
+                (m) =>
+                  `<option value="${esc(m.code)}" ${selected?.code === m.code ? 'selected' : ''}>${esc(m.name)} (${esc(formatMoney(m.world2024))} · ${m.usSharePct.toFixed(1)}% U.S.)</option>`
+              )
+              .join('')}
+          </select>
+        </div>
         ${
           selected
             ? `
-          <p class="eyebrow"><span class="dash" aria-hidden="true"></span>Selected import market</p>
-          <h4>${esc(selected.name)}</h4>
           <div class="detail-stats">
             <div class="detail-stat">
               <div class="detail-stat-val">${esc(formatMoney(selected.world2024))}</div>
@@ -406,7 +419,7 @@ function renderWhitespaceTab(data) {
             </div>
           </div>
         `
-            : `<p class="block-sub">Click any bubble on the chart to inspect a market.</p>`
+            : `<p class="block-sub">Pick a market above or hover any bubble on the chart.</p>`
         }
 
         <div class="rivals-box">
@@ -528,7 +541,7 @@ function render() {
       <div class="hero-glow" aria-hidden="true"></div>
       <div class="inner">
         <p class="eyebrow"><span class="dash" aria-hidden="true"></span>Free tool for FAS cooperators &amp; USAEDC members</p>
-        <h1>U.S. ag export data, <em>without</em> the 1990s query builder.</h1>
+        <h1>U.S. agricultural export data, <em>ready for your next briefing.</em></h1>
         <p class="hero-lead">
           Pick a commodity to get a clean 5-year export scorecard, top destinations, U.S. port breakdown, and a global whitespace map showing where competitors hold share in growing import markets. Zero login, instant load, ready for board decks and UES narratives.
         </p>
@@ -717,6 +730,36 @@ function bindEvents() {
     selectDefaultWhitespaceMarket();
     render();
   });
+
+  app.querySelector('[data-select="whitespaceMarket"]')?.addEventListener('change', (e) => {
+    state.selectedMarketCode = e.currentTarget.value;
+    render();
+  });
+
+  // Instant hover tooltip on whitespace bubbles
+  const wsFrame = app.querySelector('#ws-chart-frame');
+  const wsTooltip = app.querySelector('#ws-tooltip');
+  if (wsFrame && wsTooltip) {
+    wsFrame.querySelectorAll('.bubble-hit').forEach((g) => {
+      const showTip = (e) => {
+        const { tipName, tipWorld, tipShare, tipGrowth } = g.dataset;
+        wsTooltip.innerHTML = `<strong>${esc(tipName)}</strong><span>${esc(tipWorld)} imports · ${esc(tipShare)} U.S. share · ${esc(tipGrowth)} 4-yr</span>`;
+        wsTooltip.hidden = false;
+        const rect = wsFrame.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const left = Math.min(Math.max(12, x + 14), Math.max(12, rect.width - wsTooltip.offsetWidth - 12));
+        const top = y > 64 ? y - wsTooltip.offsetHeight - 12 : y + 16;
+        wsTooltip.style.left = `${left}px`;
+        wsTooltip.style.top = `${top}px`;
+      };
+      g.addEventListener('mouseenter', showTip);
+      g.addEventListener('mousemove', showTip);
+      g.addEventListener('mouseleave', () => {
+        wsTooltip.hidden = true;
+      });
+    });
+  }
 
   app.querySelectorAll('[data-market-code], [data-select-market]').forEach((el) => {
     const pick = () => {

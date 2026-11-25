@@ -95,8 +95,8 @@ export function renderWhitespaceSvg({
   selectedCode = null,
 }) {
   const W = 760;
-  const H = 410;
-  const pad = { top: 28, right: 32, bottom: 54, left: 60 };
+  const H = 430;
+  const pad = { top: 44, right: 36, bottom: 54, left: 60 };
   const plotW = W - pad.left - pad.right;
   const plotH = H - pad.top - pad.bottom;
 
@@ -191,21 +191,24 @@ export function renderWhitespaceSvg({
   });
   const visibleLabels = new Set();
 
+  const labelPos = new Map();
   for (const m of labelPriority) {
-    if (visibleLabels.size >= 11 && m.code !== selectedCode) continue;
+    if (visibleLabels.size >= 12 && m.code !== selectedCode) continue;
     const cx = xScale(m);
     const cy = yScale(m.usSharePct);
     const r = rScale(m.world2024);
     const w = Math.max(36, m.name.length * 6.4);
     const h = 14;
-    const bx = cx - w / 2;
-    const by = cy - r - h - 3;
+    const placeBelow = cy - r - h - 4 < 8;
+    const bx = Math.max(pad.left, Math.min(W - pad.right - w, cx - w / 2));
+    const by = placeBelow ? cy + r + 3 : cy - r - h - 3;
 
     const collides = placedBoxes.some(
       (p) => !(bx + w + 4 < p.x || bx > p.x + p.w + 4 || by + h + 2 < p.y || by > p.y + p.h + 2)
     );
     if (!collides || m.code === selectedCode) {
       visibleLabels.add(m.code);
+      labelPos.set(m.code, { x: bx + w / 2, y: placeBelow ? cy + r + 14 : cy - r - 5 });
       placedBoxes.push({ x: bx, y: by, w, h });
     }
   }
@@ -222,15 +225,14 @@ export function renderWhitespaceSvg({
       const stroke = isSelected ? '#0b1226' : isWhitespace ? '#935a08' : '#151b2e';
       const strokeW = isSelected ? 2.8 : 1.25;
 
-      const labelHtml = visibleLabels.has(m.code)
-        ? `<text x="${cx.toFixed(1)}" y="${(cy - r - 5).toFixed(1)}" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="${isSelected ? '600' : '500'}" fill="#151b2e" stroke="#ffffff" stroke-width="3" paint-order="stroke" pointer-events="none">${esc(m.name)}</text>`
+      const pos = labelPos.get(m.code);
+      const labelHtml = pos
+        ? `<text x="${pos.x.toFixed(1)}" y="${pos.y.toFixed(1)}" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="${isSelected ? '600' : '500'}" fill="#151b2e" stroke="#ffffff" stroke-width="3" paint-order="stroke" pointer-events="none">${esc(m.name)}</text>`
         : '';
 
       return `
-        <g class="bubble-hit" data-market-code="${esc(m.code)}" role="button" tabindex="0">
-          <circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${r.toFixed(1)}" fill="${fill}" stroke="${stroke}" stroke-width="${strokeW}">
-            <title>${esc(m.name)} — 2024 Imports: ${esc(formatMoney(m.world2024))} · U.S. Share: ${m.usSharePct}% · 4-Yr Growth: ${esc(formatPct(m.growth4yPct))}</title>
-          </circle>
+        <g class="bubble-hit" data-market-code="${esc(m.code)}" data-tip-name="${esc(m.name)}" data-tip-world="${esc(formatMoney(m.world2024))}" data-tip-share="${m.usSharePct.toFixed(1)}%" data-tip-growth="${esc(formatPct(m.growth4yPct))}" role="button" tabindex="0">
+          <circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${r.toFixed(1)}" fill="${fill}" stroke="${stroke}" stroke-width="${strokeW}" />
           ${labelHtml}
         </g>
       `;
