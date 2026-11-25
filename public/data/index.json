@@ -1,0 +1,248 @@
+{
+  "generatedAt": "2026-11-25",
+  "censusLatestMonth": "2026-09",
+  "ytdLabel": "Jan–Sep 2026",
+  "comtradeYear": 2024,
+  "commodities": [
+    {
+      "id": "soybeans",
+      "name": "Soybeans",
+      "sector": "Grains & Oilseeds",
+      "cooperator": "U.S. Soybean Export Council",
+      "hsLabel": "HS 1201",
+      "total2025": 16230822723,
+      "yoyPct": -34.1,
+      "topDestination": "China"
+    },
+    {
+      "id": "soymeal",
+      "name": "Soybean Meal",
+      "sector": "Grains & Oilseeds",
+      "cooperator": "U.S. Soybean Export Council",
+      "hsLabel": "HS 2304",
+      "total2025": 4828985106,
+      "yoyPct": -3.9,
+      "topDestination": "Mexico"
+    },
+    {
+      "id": "corn",
+      "name": "Corn (Maize)",
+      "sector": "Grains & Oilseeds",
+      "cooperator": "U.S. Grains Council",
+      "hsLabel": "HS 1005",
+      "total2025": 18966424727,
+      "yoyPct": 34.2,
+      "topDestination": "Mexico"
+    },
+    {
+      "id": "ddgs",
+      "name": "Distillers Grains (DDGS)",
+      "sector": "Grains & Oilseeds",
+      "cooperator": "U.S. Grains Council",
+      "hsLabel": "HS 230330",
+      "total2025": 2749905756,
+      "yoyPct": -12.1,
+      "topDestination": "Mexico"
+    },
+    {
+      "id": "wheat",
+      "name": "Wheat",
+      "sector": "Grains & Oilseeds",
+      "cooperator": "U.S. Wheat Associates",
+      "hsLabel": "HS 1001",
+      "total2025": 6358036528,
+      "yoyPct": 7.7,
+      "topDestination": "Mexico"
+    },
+    {
+      "id": "rice",
+      "name": "Rice",
+      "sector": "Grains & Oilseeds",
+      "cooperator": "USA Rice",
+      "hsLabel": "HS 1006",
+      "total2025": 1911220805,
+      "yoyPct": -22.5,
+      "topDestination": "Japan"
+    },
+    {
+      "id": "pulses",
+      "name": "Pulses (Lentils, Peas & Chickpeas)",
+      "sector": "Grains & Oilseeds",
+      "cooperator": "USA Dry Pea & Lentil Council",
+      "hsLabel": "HS 0713",
+      "total2025": 979062136,
+      "yoyPct": -29.6,
+      "topDestination": "Mexico"
+    },
+    {
+      "id": "beef",
+      "name": "Beef & Beef Offal",
+      "sector": "Meat, Dairy & Livestock",
+      "cooperator": "U.S. Meat Export Federation",
+      "hsLabel": "HS 0201 + 0202",
+      "total2025": 8028004522,
+      "yoyPct": -12.1,
+      "topDestination": "South Korea"
+    },
+    {
+      "id": "pork",
+      "name": "Pork",
+      "sector": "Meat, Dairy & Livestock",
+      "cooperator": "U.S. Meat Export Federation / National Pork Board",
+      "hsLabel": "HS 0203",
+      "total2025": 6378061770,
+      "yoyPct": -2.6,
+      "topDestination": "Mexico"
+    },
+    {
+      "id": "poultry",
+      "name": "Poultry Meat",
+      "sector": "Meat, Dairy & Livestock",
+      "cooperator": "USA Poultry & Egg Export Council",
+      "hsLabel": "HS 0207",
+      "total2025": 4742823749,
+      "yoyPct": 0.1,
+      "topDestination": "Mexico"
+    },
+    {
+      "id": "dairy",
+      "name": "Dairy Products",
+      "sector": "Meat, Dairy & Livestock",
+      "cooperator": "U.S. Dairy Export Council",
+      "hsLabel": "HS 0402, 0404–0406",
+      "total2025": 6632037579,
+      "yoyPct": 15.6,
+      "topDestination": "Mexico"
+    },
+    {
+      "id": "cheese",
+      "name": "Cheese & Curd",
+      "sector": "Meat, Dairy & Livestock",
+      "cooperator": "U.S. Dairy Export Council",
+      "hsLabel": "HS 0406",
+      "total2025": 2995226838,
+      "yoyPct": 21.3,
+      "topDestination": "Mexico"
+    },
+    {
+      "id": "genetics",
+      "name": "Bovine Genetics (Semen)",
+      "sector": "Meat, Dairy & Livestock",
+      "cooperator": "U.S. Livestock Genetics Export",
+      "hsLabel": "HS 051110",
+      "total2025": 255825848,
+      "yoyPct": -3.9,
+      "topDestination": "Brazil"
+    },
+    {
+      "id": "almonds",
+      "name": "Almonds",
+      "sector": "Tree Nuts & Produce",
+      "cooperator": "Almond Board of California",
+      "hsLabel": "HS 080211 + 080212",
+      "total2025": 6078875072,
+      "yoyPct": 26.2,
+      "topDestination": "India"
+    },
+    {
+      "id": "pistachios",
+      "name": "Pistachios",
+      "sector": "Tree Nuts & Produce",
+      "cooperator": "American Pistachio Growers",
+      "hsLabel": "HS 080251 + 080252",
+      "total2025": 2579339231,
+      "yoyPct": 2.7,
+      "topDestination": "Vietnam"
+    },
+    {
+      "id": "walnuts",
+      "name": "Walnuts",
+      "sector": "Tree Nuts & Produce",
+      "cooperator": "California Walnut Commission",
+      "hsLabel": "HS 080231 + 080232",
+      "total2025": 1289221772,
+      "yoyPct": 17.6,
+      "topDestination": "Netherlands"
+    },
+    {
+      "id": "peanuts",
+      "name": "Peanuts",
+      "sector": "Tree Nuts & Produce",
+      "cooperator": "American Peanut Council",
+      "hsLabel": "HS 1202",
+      "total2025": 513879526,
+      "yoyPct": -19.3,
+      "topDestination": "Mexico"
+    },
+    {
+      "id": "apples-pears",
+      "name": "Apples & Pears",
+      "sector": "Tree Nuts & Produce",
+      "cooperator": "USApple / Pear Bureau Northwest",
+      "hsLabel": "HS 0808",
+      "total2025": 1208379482,
+      "yoyPct": -1.5,
+      "topDestination": "Mexico"
+    },
+    {
+      "id": "potatoes",
+      "name": "Frozen Potatoes & Fries",
+      "sector": "Tree Nuts & Produce",
+      "cooperator": "Potatoes USA",
+      "hsLabel": "HS 200410",
+      "total2025": 1447045988,
+      "yoyPct": -6.3,
+      "topDestination": "Japan"
+    },
+    {
+      "id": "berries",
+      "name": "Blueberries & Cranberries",
+      "sector": "Tree Nuts & Produce",
+      "cooperator": "U.S. Highbush Blueberry Council / CMC",
+      "hsLabel": "HS 081040",
+      "total2025": 407579473,
+      "yoyPct": 1.7,
+      "topDestination": "Canada"
+    },
+    {
+      "id": "cotton",
+      "name": "Cotton",
+      "sector": "Specialty, Fiber & Wood",
+      "cooperator": "Cotton Council International",
+      "hsLabel": "HS 5201",
+      "total2025": 4818371775,
+      "yoyPct": -3.1,
+      "topDestination": "Vietnam"
+    },
+    {
+      "id": "wine",
+      "name": "Wine",
+      "sector": "Specialty, Fiber & Wood",
+      "cooperator": "Wine Institute",
+      "hsLabel": "HS 2204",
+      "total2025": 844610096,
+      "yoyPct": -34,
+      "topDestination": "United Kingdom"
+    },
+    {
+      "id": "petfood",
+      "name": "Dog & Cat Food",
+      "sector": "Specialty, Fiber & Wood",
+      "cooperator": "Pet Food Institute",
+      "hsLabel": "HS 230910",
+      "total2025": 2459428089,
+      "yoyPct": -3.7,
+      "topDestination": "Canada"
+    },
+    {
+      "id": "lumber",
+      "name": "Sawn Lumber & Hardwood",
+      "sector": "Specialty, Fiber & Wood",
+      "cooperator": "American Hardwood Export Council / SFPA",
+      "hsLabel": "HS 4407",
+      "total2025": 2535086800,
+      "yoyPct": -6.7,
+      "topDestination": "China"
+    }
+  ]
+}
