@@ -348,8 +348,8 @@ function renderWhitespaceTab(data) {
           <span class="hs-badge">${esc(data.hsLabel)}</span>
           <span class="coop-label">UN ComTrade Global Imports (${ws?.year || 2024})</span>
         </div>
-        <h2 class="commodity-title">Where Are We Losing Share? — ${esc(data.name)}</h2>
-        <p class="commodity-note">Every bubble is an importing country. Amber bubbles in the lower-right zone import heavily while U.S. market share sits at or below ${state.maxUsShare}%.</p>
+        <h2 class="commodity-title">Untapped Import Markets: ${esc(data.name)}</h2>
+        <p class="commodity-note">Every bubble is an importing country. Amber bubbles in the shaded lower-right zone are large or growing import markets where current U.S. share is at or below ${state.maxUsShare}% (subject to tariffs or access rules).</p>
       </div>
       <div class="head-actions">
         <button type="button" class="btn btn-ink" data-action="copy-whitespace">
@@ -450,7 +450,7 @@ function renderWhitespaceTab(data) {
     <div class="section-block">
       <div class="block-head">
         <div>
-          <h3>Top Whitespace Markets (U.S. Share ≤ ${state.maxUsShare}%)</h3>
+          <h3>Top Untapped Import Markets (U.S. Share ≤ ${state.maxUsShare}%)</h3>
           <p class="block-sub">Ranked by uncaptured non-U.S. import value weighted by 4-year market growth. Click any row to highlight on the chart.</p>
         </div>
       </div>
@@ -579,7 +579,7 @@ function render() {
 
           <div class="tab-switcher" role="tablist" aria-label="View mode">
             <button type="button" class="tab-btn ${state.tab === 'scorecard' ? 'is-active' : ''}" data-tab="scorecard">01 · Export Scorecard</button>
-            <button type="button" class="tab-btn ${state.tab === 'whitespace' ? 'is-active' : ''}" data-tab="whitespace">02 · Export Whitespace</button>
+            <button type="button" class="tab-btn ${state.tab === 'whitespace' ? 'is-active' : ''}" data-tab="whitespace">02 · Untapped Markets</button>
           </div>
         </div>
       </div>

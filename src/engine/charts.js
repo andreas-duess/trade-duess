@@ -249,7 +249,7 @@ export function renderWhitespaceSvg({
       <rect width="${W}" height="${H}" fill="#ffffff" rx="8" />
       <rect x="${zoneX.toFixed(1)}" y="${zoneY.toFixed(1)}" width="${zoneW.toFixed(1)}" height="${zoneH.toFixed(1)}" fill="#f7e9cf" opacity="0.58" />
       <line x1="${pad.left}" y1="${zoneY.toFixed(1)}" x2="${W - pad.right}" y2="${zoneY.toFixed(1)}" stroke="#e0982c" stroke-width="1.3" stroke-dasharray="5 4" />
-      <text x="${(pad.left + 8).toFixed(1)}" y="${(zoneY - 6).toFixed(1)}" text-anchor="start" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="500" fill="#935a08">WHITESPACE CEILING (U.S. SHARE ≤ ${maxUsShare}%)</text>
+      <text x="${(pad.left + 8).toFixed(1)}" y="${(zoneY - 6).toFixed(1)}" text-anchor="start" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="500" fill="#935a08">UNTAPPED ZONE (U.S. SHARE ≤ ${maxUsShare}%)</text>
       ${xTicksHtml}
       ${yGrid}
       <text x="${(pad.left + plotW / 2).toFixed(1)}" y="${H - 7}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#4a5470">${esc(xAxisTitle)}</text>
