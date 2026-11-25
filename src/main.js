@@ -541,7 +541,8 @@ function render() {
         <p class="eyebrow"><span class="dash" aria-hidden="true"></span>Free tool for FAS cooperators &amp; USAEDC members</p>
         <h1>U.S. agricultural export data, <em>ready for your next briefing.</em></h1>
         <p class="hero-lead">
-          Pick a commodity to get a clean 5-year export scorecard, top destinations, U.S. port breakdown, and a global whitespace map showing where competitors hold share in growing import markets. Zero login, instant load, ready for board decks and UES narratives.
+          Pick a commodity to get a clean 5-year export scorecard, top destinations, U.S. port breakdown, and a global map showing untapped import markets where competitors currently hold share.<br />
+          Zero login, instant load, ready for board decks and UES narratives.
         </p>
         <div class="hero-qa">
           ${HERO_FAQS.map(
