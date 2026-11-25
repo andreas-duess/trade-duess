@@ -516,8 +516,6 @@ function render() {
         .join('')
     : `<option value="">All destinations</option>`;
 
-  const quickPresets = ['almonds', 'beef', 'pork', 'dairy', 'soybeans', 'corn', 'wheat', 'rice', 'petfood', 'wine', 'genetics', 'cotton'];
-
   app.innerHTML = `
     <header class="site-header">
       <div class="inner header-bar">
@@ -584,16 +582,6 @@ function render() {
             <button type="button" class="tab-btn ${state.tab === 'whitespace' ? 'is-active' : ''}" data-tab="whitespace">02 · Export Whitespace</button>
           </div>
         </div>
-
-        <div class="preset-strip" aria-label="Quick commodity presets">
-          ${quickPresets
-            .map((id) => {
-              const p = COMMODITY_PRESETS.find((x) => x.id === id);
-              if (!p) return '';
-              return `<button type="button" class="preset-chip ${state.commodityId === id ? 'is-active' : ''}" data-preset="${esc(id)}">${esc(p.name)}</button>`;
-            })
-            .join('')}
-        </div>
       </div>
     </section>
 
@@ -654,12 +642,6 @@ function bindEvents() {
     state.destinationCode = e.currentTarget.value;
     syncUrl();
     render();
-  });
-
-  app.querySelectorAll('[data-preset]').forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-      loadCommodity(e.currentTarget.dataset.preset);
-    });
   });
 
   app.querySelectorAll('[data-tab]').forEach((btn) => {

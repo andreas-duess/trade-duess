@@ -422,38 +422,6 @@ button, select, input {
   color: var(--on-ink);
 }
 
-.preset-strip {
-  margin-top: 1.15rem;
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  flex-wrap: wrap;
-}
-
-.preset-chip {
-  padding: 0.34rem 0.8rem;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--line);
-  background: var(--white);
-  color: var(--ink-soft);
-  font-size: var(--t-2xs);
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.14s ease;
-}
-
-.preset-chip:hover {
-  border-color: var(--ink);
-  color: var(--ink);
-}
-
-.preset-chip.is-active {
-  background: var(--amber-soft);
-  border-color: var(--amber);
-  color: var(--amber-deep);
-  font-weight: 600;
-}
-
 /* Main Workspace Band (Surface) */
 .workspace-band {
   background: var(--surface);
