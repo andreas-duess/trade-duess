@@ -606,6 +606,10 @@ function render() {
           </div>
           <div class="faq-list">
             <details class="faq-item" open>
+              <summary>How fresh is the data?</summary>
+              <p>U.S. export figures refresh automatically on the 10th of every month right after the U.S. Census Bureau publishes its monthly international trade release, pulling the newest available year-to-date month automatically. Global import demand and rival exporter shares come from UN ComTrade's annual HS release (currently 2020 and 2024). Always verify final figures directly against USDA FAS GATS or U.S. Census before filing federal grant submissions.</p>
+            </details>
+            <details class="faq-item">
               <summary>How does trade.duess.com compare to USDA FAS GATS?</summary>
               <p>trade.duess.com pulls from the same official U.S. Census Bureau International Trade API that feeds USDA FAS GATS, plus UN ComTrade for global import demand and rival exporter shares. Instead of building multi-step GATS queries, you pick a commodity preset and immediately get 5-year trends, YTD momentum, top destinations, U.S. customs districts, and untapped global markets.</p>
             </details>
