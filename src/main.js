@@ -520,18 +520,19 @@ function render() {
     <header class="site-header">
       <div class="inner header-bar">
         <div class="header-left">
-          <a class="site-name" href="https://duess.com/for-usaedc-members/" target="_blank" rel="noopener">
+          <a class="site-name" href="https://duess.com/for-usaedc-members/" title="Back to Duess Strategies for USAEDC Members">
             <img src="/ds-logo-light.svg" alt="Duess Strategies" class="site-logo" />
           </a>
-          <span class="header-tool-tag">trade.duess.com</span>
+          <a class="header-tool-tag" href="/">trade.duess.com</a>
         </div>
-        <div class="header-right">
-          <a class="header-link" href="https://duess.com/for-usaedc-members/" target="_blank" rel="noopener">USAEDC Members</a>
-          <div class="status-pill">
-            <span class="status-dot" aria-hidden="true"></span>
-            <span>Census &amp; UN ComTrade · Instant</span>
-          </div>
-        </div>
+        <nav class="header-nav" aria-label="Free USAEDC resources">
+          <a class="header-link is-current" href="https://trade.duess.com/" aria-current="page">Export Scorecard</a>
+          <a class="header-link" href="https://events.duess.com/">Trade Show Map</a>
+          <a class="header-link" href="https://ues-checker.duess.com/">UES Checker</a>
+          <a class="header-link" href="https://duess.com/ai-policy/#fas">FAS AI Policy</a>
+          <a class="header-link" href="https://duess.com/worksheet/">Worksheet</a>
+          <a class="header-link" href="https://duess.com/baltimore/">Slides</a>
+        </nav>
       </div>
     </header>
 
@@ -628,7 +629,7 @@ function render() {
             </details>
             <details class="faq-item">
               <summary>Is trade.duess.com free to use and does it require a login?</summary>
-              <p>Yes. It is 100% free for USAEDC members, FAS cooperators, state regional trade groups, and agricultural exporters, with zero login, no paywalls, and no tracking scripts.</p>
+              <p>Yes. It is 100% free for USAEDC members, FAS cooperators, state regional trade groups, and agricultural exporters, with zero login and no paywalls.</p>
             </details>
           </div>
         </section>
@@ -639,10 +640,13 @@ function render() {
       <div class="inner footer-inner">
         <div class="footer-top">
           <div class="footer-links">
-            <a href="https://duess.com/for-usaedc-members/" target="_blank" rel="noopener">AI for FAS Cooperators</a>
-            <a href="https://events.duess.com/" target="_blank" rel="noopener">Global Ag Trade Show Map</a>
-            <a href="https://ues-checker.duess.com/" target="_blank" rel="noopener">UES Copy-Forward Checker</a>
-            <a href="https://duess.com/ai-policy/#fas" target="_blank" rel="noopener">One-Page FAS AI Policy</a>
+            <a href="https://duess.com/for-usaedc-members/">AI for FAS Cooperators</a>
+            <a href="https://trade.duess.com/">U.S. Ag Export Scorecard</a>
+            <a href="https://events.duess.com/">Global Ag Trade Show Map</a>
+            <a href="https://ues-checker.duess.com/">UES Copy-Forward Checker</a>
+            <a href="https://duess.com/ai-policy/#fas">One-Page FAS AI Policy</a>
+            <a href="https://duess.com/worksheet/">AI Workflow Worksheet</a>
+            <a href="https://duess.com/baltimore/">Baltimore Forum Slides</a>
           </div>
         </div>
         <div class="footer-base">
@@ -651,7 +655,7 @@ function render() {
             <li><a href="/privacy-policy/">Privacy Policy</a></li>
             <li><a href="/terms/">Terms of Use</a></li>
           </ul>
-          <span class="footer-help">Help and support: Questions or commodity requests? Email <a href="mailto:andreas@duess.com">andreas@duess.com</a>.</span>
+          <span class="footer-help">Help and support: Email <a href="mailto:andreas@duess.com">andreas@duess.com</a>.</span>
         </div>
       </div>
     </footer>
