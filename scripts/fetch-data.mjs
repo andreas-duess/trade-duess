@@ -19,9 +19,38 @@ const OUT_DIR = path.join(ROOT, 'public', 'data');
 const SHARDS_DIR = path.join(OUT_DIR, 'commodities');
 
 const YEARS = [2021, 2022, 2023, 2024, 2025];
-const YTD_YEAR = 2026;
-const YTD_MONTH = '09'; // Latest Census monthly release (Sept 2026)
-const YTD_LABEL = 'Jan–Sep 2026';
+let YTD_YEAR = 2026;
+let YTD_MONTH = '09'; // Auto-detected at runtime; fallback Sept 2026
+let YTD_LABEL = 'Jan–Sep 2026';
+
+const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+async function detectLatestCensusPeriod(censusKey) {
+  const now = new Date();
+  for (let offset = 0; offset < 8; offset++) {
+    const dt = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - offset, 1));
+    const y = dt.getUTCFullYear();
+    const m = dt.getUTCMonth() + 1;
+    const mm = String(m).padStart(2, '0');
+    const url = `https://api.census.gov/data/timeseries/intltrade/exports/hs?get=ALL_VAL_YR&E_COMMODITY=080212&CTY_CODE=-&time=${y}-${mm}&key=${censusKey}`;
+    try {
+      const res = await fetch(url);
+      if (res.ok && res.status !== 204) {
+        const json = await res.json();
+        if (Array.isArray(json) && json.length > 1 && Number(json[1][0]) > 0) {
+          return {
+            year: y,
+            month: mm,
+            label: m === 1 ? `Jan ${y}` : `Jan–${MONTH_NAMES[m - 1]} ${y}`,
+          };
+        }
+      }
+    } catch {
+      // continue walking backwards
+    }
+  }
+  return { year: YTD_YEAR, month: YTD_MONTH, label: YTD_LABEL };
+}
 
 async function loadSecret(name) {
   if (process.env[name]) return process.env[name].trim();
@@ -134,7 +163,7 @@ function isRealCensusCountry(code, name) {
 async function fetchCensusForHsCode(hsCode, censusKey) {
   const periods = [
     ...YEARS.map((y) => ({ key: String(y), time: `${y}-12` })),
-    { key: 'ytdPrev', time: `2025-${YTD_MONTH}` },
+    { key: 'ytdPrev', time: `${YTD_YEAR - 1}-${YTD_MONTH}` },
     { key: 'ytdCurr', time: `${YTD_YEAR}-${YTD_MONTH}` },
   ];
 
@@ -400,6 +429,12 @@ async function buildPreset(preset, censusKey, comtradeKey, reporterMap) {
 async function main() {
   const censusKey = await loadSecret('CENSUS_API_KEY');
   const comtradeKey = await loadSecret('COMTRADE_API_KEY');
+
+  const latest = await detectLatestCensusPeriod(censusKey);
+  YTD_YEAR = latest.year;
+  YTD_MONTH = latest.month;
+  YTD_LABEL = latest.label;
+  console.log(`Latest U.S. Census monthly release detected: ${YTD_YEAR}-${YTD_MONTH} (${YTD_LABEL})`);
 
   await fs.mkdir(SHARDS_DIR, { recursive: true });
 
