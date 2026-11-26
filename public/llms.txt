@@ -14,7 +14,7 @@
 
 ## 24 Covered Cooperator Commodity Baskets
 
-Almonds, Walnuts, Pistachios, Pecans, Beef & Beef Offal, Pork, Poultry, Dairy Products, Soybeans, Corn (Maize), Wheat, Rice, Sorghum, Pulses (Dry Peas & Lentils), Peanuts, Apples & Pears, Table Grapes, Wine, Cotton, Hardwood Lumber, Softwood Lumber, Dog & Cat Food, Bovine Genetics (Semen), and Cranberries & Blueberries.
+Soybeans, Soybean Meal, Corn (Maize), Distillers Grains (DDGS), Wheat, Rice, Pulses (Lentils, Peas & Chickpeas), Beef & Beef Offal, Pork, Poultry Meat, Dairy Products, Cheese & Curd, Bovine Genetics (Semen), Almonds, Pistachios, Walnuts, Peanuts, Apples & Pears, Frozen Potatoes & Fries, Blueberries & Cranberries, Cotton, Wine, Dog & Cat Food, and Sawn Lumber & Hardwood.
 
 ## Direct Deep Links
 

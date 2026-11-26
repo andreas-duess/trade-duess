@@ -59,11 +59,13 @@ async function loadSecret(name) {
 }
 
 async function fetchJson(url, headers = {}, retries = 3) {
+  let lastStatus;
   for (let attempt = 1; attempt <= retries; attempt++) {
     try {
       const res = await fetch(url, { headers });
       if (res.status === 204) return null;
       if (res.status === 429 || res.status >= 500) {
+        lastStatus = res.status;
         const waitMs = 1200 * attempt;
         await new Promise((r) => setTimeout(r, waitMs));
         continue;
@@ -80,7 +82,8 @@ async function fetchJson(url, headers = {}, retries = 3) {
       await new Promise((r) => setTimeout(r, 900 * attempt));
     }
   }
-  return null;
+  // out of retries on 429/5xx: fail the run rather than publish empty data
+  throw new Error(`HTTP ${lastStatus} after ${retries} attempts for ${url.replace(/key=[^&]+/, 'key=***')}`);
 }
 
 function titleCaseCountry(raw) {

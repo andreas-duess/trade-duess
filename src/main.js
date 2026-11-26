@@ -82,9 +82,10 @@ function syncUrl() {
   window.history.replaceState(null, '', next);
 }
 
-async function loadCommodity(id) {
+// keepDestination: on first load, keep the ?dest= filter read from a shared link
+async function loadCommodity(id, { keepDestination = false } = {}) {
   state.commodityId = id;
-  state.destinationCode = '';
+  if (!keepDestination) state.destinationCode = '';
   state.showAllDestinations = false;
   state.selectedMarketCode = null;
   state.error = '';
@@ -819,4 +820,4 @@ function bindEvents() {
 }
 
 readUrlState();
-loadCommodity(state.commodityId);
+loadCommodity(state.commodityId, { keepDestination: true });
