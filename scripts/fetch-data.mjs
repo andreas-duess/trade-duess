@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /**
- * Fetches official U.S. Census International Trade export data (2021-2026 YTD)
+ * Fetches official U.S. Census International Trade export data (the five full
+ * years before the latest Census month, plus year-to-date)
  * and UN ComTrade global import / competitor data (2020 & 2024) for all curated
  * USAEDC cooperator commodity presets, writing compact static JSON shards to
  * public/data/.
@@ -18,10 +19,13 @@ const ROOT = path.resolve(import.meta.dirname, '..');
 const OUT_DIR = path.join(ROOT, 'public', 'data');
 const SHARDS_DIR = path.join(OUT_DIR, 'commodities');
 
-const YEARS = [2021, 2022, 2023, 2024, 2025];
-let YTD_YEAR = 2026;
-let YTD_MONTH = '09'; // Auto-detected at runtime; fallback Sept 2026
-let YTD_LABEL = 'Jan–Sep 2026';
+// All set in main() from the latest Census month: YTD runs Jan to that month, and the
+// five full years end the year before it (LATEST_YEAR = YTD_YEAR - 1).
+let YTD_YEAR;
+let YTD_MONTH;
+let YTD_LABEL;
+let LATEST_YEAR;
+let YEARS = [];
 
 const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -49,7 +53,7 @@ async function detectLatestCensusPeriod(censusKey) {
       // continue walking backwards
     }
   }
-  return { year: YTD_YEAR, month: YTD_MONTH, label: YTD_LABEL };
+  throw new Error('Could not detect the latest U.S. Census monthly release (last 8 months tried).');
 }
 
 async function loadSecret(name) {
@@ -179,8 +183,8 @@ async function fetchCensusForHsCode(hsCode, censusKey) {
     })
   );
 
-  // Fetch 2025 customs districts
-  const distUrl = `https://api.census.gov/data/timeseries/intltrade/exports/hs?get=DISTRICT,DIST_NAME,ALL_VAL_YR&E_COMMODITY=${hsCode}&time=2025-12&key=${censusKey}`;
+  // Fetch customs districts for the latest full year
+  const distUrl = `https://api.census.gov/data/timeseries/intltrade/exports/hs?get=DISTRICT,DIST_NAME,ALL_VAL_YR&E_COMMODITY=${hsCode}&time=${LATEST_YEAR}-12&key=${censusKey}`;
   const distRows = await fetchJson(distUrl);
 
   return {
@@ -312,8 +316,8 @@ async function buildPreset(preset, censusKey, comtradeKey, reporterMap) {
   let totalYtdPrev = 0;
   let totalYtdCurr = 0;
 
-  const countriesMap = new Map(); // ctyCode -> { code, name, byYear: {2021..2025}, ytdPrev, ytdCurr }
-  const districtsMap = new Map(); // distCode -> { code, name, value2025 }
+  const countriesMap = new Map(); // ctyCode -> { code, name, byYear: {year: value}, ytdPrev, ytdCurr }
+  const districtsMap = new Map(); // distCode -> { code, name, valueLatest }
 
   for (const hsCode of preset.hsCodes) {
     const { countryResults, districtRows } = await fetchCensusForHsCode(hsCode, censusKey);
@@ -354,9 +358,9 @@ async function buildPreset(preset, censusKey, comtradeKey, reporterMap) {
       const entry = districtsMap.get(distCode) || {
         code: distCode,
         name: titleCaseDistrict(distName),
-        value2025: 0,
+        valueLatest: 0,
       };
-      entry.value2025 += val;
+      entry.valueLatest += val;
       districtsMap.set(distCode, entry);
     }
   }
@@ -371,51 +375,56 @@ async function buildPreset(preset, censusKey, comtradeKey, reporterMap) {
   if (!totalYtdPrev) totalYtdPrev = [...countriesMap.values()].reduce((s, c) => s + c.ytdPrev, 0);
   if (!totalYtdCurr) totalYtdCurr = [...countriesMap.values()].reduce((s, c) => s + c.ytdCurr, 0);
 
+  const [kFirst, kPrev, kLatest] = [YEARS[0], LATEST_YEAR - 1, LATEST_YEAR].map(String);
+  const totalLatest = totalsByYear[kLatest];
+
   const destinations = [...countriesMap.values()]
-    .filter((c) => c.byYear['2025'] > 0 || c.ytdCurr > 0)
-    .sort((a, b) => b.byYear['2025'] - a.byYear['2025'])
+    .filter((c) => c.byYear[kLatest] > 0 || c.ytdCurr > 0)
+    .sort((a, b) => b.byYear[kLatest] - a.byYear[kLatest])
     .slice(0, 40)
     .map((c) => {
-      const v25 = c.byYear['2025'];
-      const v24 = c.byYear['2024'];
-      const v21 = c.byYear['2021'];
+      const vLatest = c.byYear[kLatest];
+      const vPrev = c.byYear[kPrev];
+      const vFirst = c.byYear[kFirst];
       return {
         code: c.code,
         name: c.name,
         byYear: c.byYear,
         ytdPrev: c.ytdPrev,
         ytdCurr: c.ytdCurr,
-        share2025Pct: totalsByYear['2025'] > 0 ? Number(((v25 / totalsByYear['2025']) * 100).toFixed(1)) : 0,
-        yoyPct: v24 > 0 ? Number((((v25 - v24) / v24) * 100).toFixed(1)) : null,
-        chg5yPct: v21 > 0 ? Number((((v25 - v21) / v21) * 100).toFixed(1)) : null,
+        shareLatestPct: totalLatest > 0 ? Number(((vLatest / totalLatest) * 100).toFixed(1)) : 0,
+        yoyPct: vPrev > 0 ? Number((((vLatest - vPrev) / vPrev) * 100).toFixed(1)) : null,
+        chg5yPct: vFirst > 0 ? Number((((vLatest - vFirst) / vFirst) * 100).toFixed(1)) : null,
       };
     });
 
   const districts = [...districtsMap.values()]
-    .sort((a, b) => b.value2025 - a.value2025)
+    .sort((a, b) => b.valueLatest - a.valueLatest)
     .slice(0, 12)
     .map((d) => ({
       code: d.code,
       name: d.name,
-      value2025: d.value2025,
-      share2025Pct: totalsByYear['2025'] > 0 ? Number(((d.value2025 / totalsByYear['2025']) * 100).toFixed(1)) : 0,
+      valueLatest: d.valueLatest,
+      shareLatestPct: totalLatest > 0 ? Number(((d.valueLatest / totalLatest) * 100).toFixed(1)) : 0,
     }));
 
   // 2. Fetch UN ComTrade global import demand & competitor share
   const whitespace = await fetchComTradeForPreset(preset, comtradeKey, reporterMap);
 
-  const v25 = totalsByYear['2025'];
-  const v24 = totalsByYear['2024'];
-  const v21 = totalsByYear['2021'];
+  const vPrev = totalsByYear[kPrev];
+  const vFirst = totalsByYear[kFirst];
 
   return {
     ...preset,
     updatedAt: new Date().toISOString().slice(0, 10),
+    years: YEARS,
+    latestYear: LATEST_YEAR,
+    ytdYear: YTD_YEAR,
     ytdLabel: YTD_LABEL,
     summary: {
-      total2025: v25,
-      yoyPct: v24 > 0 ? Number((((v25 - v24) / v24) * 100).toFixed(1)) : null,
-      chg5yPct: v21 > 0 ? Number((((v25 - v21) / v21) * 100).toFixed(1)) : null,
+      totalLatest,
+      yoyPct: vPrev > 0 ? Number((((totalLatest - vPrev) / vPrev) * 100).toFixed(1)) : null,
+      chg5yPct: vFirst > 0 ? Number((((totalLatest - vFirst) / vFirst) * 100).toFixed(1)) : null,
       ytdCurr: totalYtdCurr,
       ytdPrev: totalYtdPrev,
       ytdYoyPct: totalYtdPrev > 0 ? Number((((totalYtdCurr - totalYtdPrev) / totalYtdPrev) * 100).toFixed(1)) : null,
@@ -437,7 +446,9 @@ async function main() {
   YTD_YEAR = latest.year;
   YTD_MONTH = latest.month;
   YTD_LABEL = latest.label;
-  console.log(`Latest U.S. Census monthly release detected: ${YTD_YEAR}-${YTD_MONTH} (${YTD_LABEL})`);
+  LATEST_YEAR = YTD_YEAR - 1;
+  YEARS = Array.from({ length: 5 }, (_, i) => LATEST_YEAR - 4 + i);
+  console.log(`Latest U.S. Census monthly release detected: ${YTD_YEAR}-${YTD_MONTH} (${YTD_LABEL}); full years ${YEARS[0]}–${LATEST_YEAR}`);
 
   await fs.mkdir(SHARDS_DIR, { recursive: true });
 
@@ -456,7 +467,7 @@ async function main() {
     const data = await buildPreset(preset, censusKey, comtradeKey, reporterMap);
     await fs.writeFile(path.join(SHARDS_DIR, `${preset.id}.json`), JSON.stringify(data));
 
-    const valM = (data.summary.total2025 / 1e6).toFixed(0);
+    const valM = (data.summary.totalLatest / 1e6).toFixed(0);
     const yoy = data.summary.yoyPct != null ? `${data.summary.yoyPct >= 0 ? '+' : ''}${data.summary.yoyPct}%` : 'n/a';
     console.log(`$${valM}M (${yoy} YoY) | Top: ${data.summary.topDestination} | ${data.whitespace.markets.length} global markets`);
 
@@ -466,7 +477,7 @@ async function main() {
       sector: data.sector,
       cooperator: data.cooperator,
       hsLabel: data.hsLabel,
-      total2025: data.summary.total2025,
+      totalLatest: data.summary.totalLatest,
       yoyPct: data.summary.yoyPct,
       topDestination: data.summary.topDestination,
     });
@@ -476,6 +487,8 @@ async function main() {
     generatedAt: new Date().toISOString().slice(0, 10),
     censusLatestMonth: `${YTD_YEAR}-${YTD_MONTH}`,
     ytdLabel: YTD_LABEL,
+    years: YEARS,
+    latestYear: LATEST_YEAR,
     comtradeYear: 2024,
     commodities: indexList,
   };

@@ -4,7 +4,7 @@
 
 ## What It Does
 
-1. **Export Scorecard (`01 · Export Scorecard`):** Instant 5-year U.S. export totals (2021-2025), latest year-to-date (YTD) momentum, top destination markets, and U.S. customs district breakdowns for 24 curated USAEDC cooperator commodity baskets. Includes one-click "Copy table for PowerPoint / UES", CSV download, and SVG chart export.
+1. **Export Scorecard (`01 · Export Scorecard`):** Instant 5-year U.S. export totals (the last five full years), latest year-to-date (YTD) momentum, top destination markets, and U.S. customs district breakdowns for 24 curated USAEDC cooperator commodity baskets. Includes one-click "Copy table for PowerPoint / UES", CSV download, and SVG chart export.
 2. **Untapped Import Markets (`02 · Untapped Markets`):** Interactive bubble chart comparing 2024 global import market size (or 4-year import growth, 2020-2024) against current U.S. market share from UN ComTrade, highlighting large or fast-growing import markets where U.S. share sits below a configurable threshold alongside the top global rival exporting countries.
 
 ## Data Sources & Freshness

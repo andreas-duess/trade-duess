@@ -13,16 +13,12 @@ function esc(str) {
 }
 
 /**
- * 5-year bar chart (2021–2025) plus 2026 YTD column.
+ * 5-year bar chart (the full years in the data) plus a YTD column.
  */
-export function renderTrendChartSvg({ byYear, ytdCurr, ytdLabel, title }) {
+export function renderTrendChartSvg({ years, latestYear, byYear, ytdCurr, ytdLabel, title }) {
   const items = [
-    { label: '2021', value: Number(byYear['2021'] || 0), kind: 'past' },
-    { label: '2022', value: Number(byYear['2022'] || 0), kind: 'past' },
-    { label: '2023', value: Number(byYear['2023'] || 0), kind: 'past' },
-    { label: '2024', value: Number(byYear['2024'] || 0), kind: 'past' },
-    { label: '2025', value: Number(byYear['2025'] || 0), kind: 'latest' },
-    { label: ytdLabel || '2026 YTD', value: Number(ytdCurr || 0), kind: 'ytd' },
+    ...years.map((y) => ({ label: String(y), value: Number(byYear[y] || 0), kind: y === latestYear ? 'latest' : 'past' })),
+    { label: ytdLabel || 'YTD', value: Number(ytdCurr || 0), kind: 'ytd' },
   ];
 
   const maxVal = Math.max(...items.map((i) => i.value), 1);

@@ -69,7 +69,7 @@ export function buildScorecardTsv(data, { destination = null, limit = 10 } = {})
   if (destination) {
     lines.push(`${data.name} (${data.hsLabel}) — U.S. Exports to ${destination.name}`);
     lines.push('Year\tExports (USD)');
-    for (const yr of ['2021', '2022', '2023', '2024', '2025']) {
+    for (const yr of data.years) {
       lines.push(`${yr}\t${formatMoney(destination.byYear[yr], { compact: false })}`);
     }
     lines.push(`${data.ytdLabel}\t${formatMoney(destination.ytdCurr, { compact: false })}`);
@@ -78,22 +78,24 @@ export function buildScorecardTsv(data, { destination = null, limit = 10 } = {})
     return lines.join('\n');
   }
 
-  lines.push(`${data.name} (${data.hsLabel}) — Top ${limit} U.S. Export Destinations (2025)`);
-  lines.push('Rank\tDestination\t2025 Exports (USD)\tShare of Total\tYoY (2024-25)\t5-Yr (2021-25)');
+  const latest = data.latestYear;
+  const yy = String(latest).slice(2);
+  lines.push(`${data.name} (${data.hsLabel}) — Top ${limit} U.S. Export Destinations (${latest})`);
+  lines.push(`Rank\tDestination\t${latest} Exports (USD)\tShare of Total\tYoY (${latest - 1}-${yy})\t5-Yr (${data.years[0]}-${yy})`);
   data.destinations.slice(0, limit).forEach((d, idx) => {
     lines.push(
       [
         idx + 1,
         d.name,
-        formatMoney(d.byYear['2025'], { compact: false }),
-        `${d.share2025Pct.toFixed(1)}%`,
+        formatMoney(d.byYear[latest], { compact: false }),
+        `${d.shareLatestPct.toFixed(1)}%`,
         formatPct(d.yoyPct),
         formatPct(d.chg5yPct),
       ].join('\t')
     );
   });
   lines.push('');
-  lines.push(`Total 2025 U.S. Exports:\t${formatMoney(data.summary.total2025, { compact: false })}`);
+  lines.push(`Total ${latest} U.S. Exports:\t${formatMoney(data.summary.totalLatest, { compact: false })}`);
   lines.push('Source: U.S. Census Bureau International Trade (via trade.duess.com)');
   return lines.join('\n');
 }
@@ -125,16 +127,12 @@ function csvCell(v) {
 }
 
 export function buildScorecardCsv(data) {
-  const header = ['Rank', 'Destination', '2021_USD', '2022_USD', '2023_USD', '2024_USD', '2025_USD', 'Share_2025_Pct', 'YoY_Pct', 'Change_5Yr_Pct', 'YTD_2026_USD'];
+  const header = ['Rank', 'Destination', ...data.years.map((y) => `${y}_USD`), `Share_${data.latestYear}_Pct`, 'YoY_Pct', 'Change_5Yr_Pct', `YTD_${data.ytdYear}_USD`];
   const rows = data.destinations.map((d, idx) => [
     idx + 1,
     d.name,
-    d.byYear['2021'],
-    d.byYear['2022'],
-    d.byYear['2023'],
-    d.byYear['2024'],
-    d.byYear['2025'],
-    d.share2025Pct,
+    ...data.years.map((y) => d.byYear[y]),
+    d.shareLatestPct,
     d.yoyPct ?? '',
     d.chg5yPct ?? '',
     d.ytdCurr,

@@ -18,7 +18,9 @@ const CHEVRON_DOWN = `<svg class="hero-qa-chev" width="14" height="14" viewBox="
 const HERO_FAQS = [
   {
     q: 'Where does the data come from?',
-    a: 'U.S. export totals, destination tables, and customs-district breakdowns come from the official U.S. Census Bureau International Trade API (the same upstream dataset that feeds USDA GATS), current through September 2026. Global import demand, U.S. market share, and global exporter rankings come from UN ComTrade (2020 and 2024 annual HS data).',
+    // the Census month comes from the loaded data, so the answer stays current after each refresh
+    a: (data) =>
+      `U.S. export totals, destination tables, and customs-district breakdowns come from the official U.S. Census Bureau International Trade API (the same upstream dataset that feeds USDA GATS)${data?.ytdLabel ? ` (latest data: ${data.ytdLabel})` : ''}. Global import demand, U.S. market share, and global exporter rankings come from UN ComTrade (2020 and 2024 annual HS data).`,
   },
   {
     q: 'How do I share a commodity view with my board or team?',
@@ -160,11 +162,14 @@ function renderScorecardTab(data) {
     : null;
 
   const byYear = activeDest ? activeDest.byYear : data.totalsByYear;
-  const total2025 = byYear['2025'] || 0;
-  const total2024 = byYear['2024'] || 0;
-  const total2021 = byYear['2021'] || 0;
-  const yoyPct = total2024 > 0 ? Number((((total2025 - total2024) / total2024) * 100).toFixed(1)) : null;
-  const chg5yPct = total2021 > 0 ? Number((((total2025 - total2021) / total2021) * 100).toFixed(1)) : null;
+  const { years, latestYear } = data;
+  const firstYear = years[0];
+  const yearSpan = `${firstYear}–${String(latestYear).slice(2)}`;
+  const totalLatest = byYear[latestYear] || 0;
+  const totalPrev = byYear[latestYear - 1] || 0;
+  const totalFirst = byYear[firstYear] || 0;
+  const yoyPct = totalPrev > 0 ? Number((((totalLatest - totalPrev) / totalPrev) * 100).toFixed(1)) : null;
+  const chg5yPct = totalFirst > 0 ? Number((((totalLatest - totalFirst) / totalFirst) * 100).toFixed(1)) : null;
   const ytdCurr = activeDest ? activeDest.ytdCurr : data.summary.ytdCurr;
   const ytdPrev = activeDest ? activeDest.ytdPrev : data.summary.ytdPrev;
   const ytdYoyPct = ytdPrev > 0 ? Number((((ytdCurr - ytdPrev) / ytdPrev) * 100).toFixed(1)) : null;
@@ -173,13 +178,15 @@ function renderScorecardTab(data) {
   const visibleDestinations = data.destinations.slice(0, destLimit);
 
   const chartSvg = renderTrendChartSvg({
+    years,
+    latestYear,
     byYear,
     ytdCurr,
     ytdLabel: data.ytdLabel,
     title: `${data.name} U.S. exports${activeDest ? ` to ${activeDest.name}` : ''}`,
   });
 
-  const maxDistrict = Math.max(...data.districts.map((d) => d.value2025), 1);
+  const maxDistrict = Math.max(...data.districts.map((d) => d.valueLatest), 1);
 
   return `
     <div class="commodity-head">
@@ -192,7 +199,7 @@ function renderScorecardTab(data) {
         <p class="commodity-note">${esc(data.note)}</p>
         ${
           activeDest
-            ? `<button type="button" class="dest-filter-pill" data-action="clear-dest">Filtered to ${esc(activeDest.name)} (${activeDest.share2025Pct}% of U.S. exports) · Clear ×</button>`
+            ? `<button type="button" class="dest-filter-pill" data-action="clear-dest">Filtered to ${esc(activeDest.name)} (${activeDest.shareLatestPct}% of U.S. exports) · Clear ×</button>`
             : ''
         }
       </div>
@@ -210,19 +217,19 @@ function renderScorecardTab(data) {
 
     <div class="kpi-grid">
       <div class="kpi-tile">
-        <div class="kpi-val">${esc(formatMoney(total2025))}</div>
-        <div class="kpi-name">2025 Full-Year Exports</div>
-        <div class="kpi-sub">${activeDest ? `${activeDest.share2025Pct}% of total U.S. exports` : `Top market: ${esc(data.summary.topDestination || '—')}`}</div>
+        <div class="kpi-val">${esc(formatMoney(totalLatest))}</div>
+        <div class="kpi-name">${latestYear} Full-Year Exports</div>
+        <div class="kpi-sub">${activeDest ? `${activeDest.shareLatestPct}% of total U.S. exports` : `Top market: ${esc(data.summary.topDestination || '—')}`}</div>
       </div>
       <div class="kpi-tile">
         <div class="kpi-val ${pctClass(yoyPct)}">${esc(formatPct(yoyPct))}</div>
-        <div class="kpi-name">YoY Change (2024–25)</div>
-        <div class="kpi-sub">Prior year: ${esc(formatMoney(total2024))}</div>
+        <div class="kpi-name">YoY Change (${latestYear - 1}–${String(latestYear).slice(2)})</div>
+        <div class="kpi-sub">Prior year: ${esc(formatMoney(totalPrev))}</div>
       </div>
       <div class="kpi-tile">
         <div class="kpi-val ${pctClass(chg5yPct)}">${esc(formatPct(chg5yPct))}</div>
-        <div class="kpi-name">5-Year Change (2021–25)</div>
-        <div class="kpi-sub">2021 baseline: ${esc(formatMoney(total2021))}</div>
+        <div class="kpi-name">5-Year Change (${yearSpan})</div>
+        <div class="kpi-sub">${firstYear} baseline: ${esc(formatMoney(totalFirst))}</div>
       </div>
       <div class="kpi-tile">
         <div class="kpi-val">${esc(formatMoney(ytdCurr))}</div>
@@ -235,7 +242,7 @@ function renderScorecardTab(data) {
       <div class="block-head">
         <div>
           <h3>5-Year Export Trend${activeDest ? ` (${esc(activeDest.name)})` : ''}</h3>
-          <p class="block-sub">Annual U.S. export value (USD) from 2021 to 2025, plus ${esc(data.ytdLabel)} year-to-date.</p>
+          <p class="block-sub">Annual U.S. export value (USD) from ${firstYear} to ${latestYear}, plus ${esc(data.ytdLabel)} year-to-date.</p>
         </div>
         <button type="button" class="btn btn-ghost btn-sm" data-action="download-svg">Download chart SVG</button>
       </div>
@@ -246,7 +253,7 @@ function renderScorecardTab(data) {
       <div>
         <div class="block-head">
           <div>
-            <h3>Top ${destLimit} Export Destinations (2025)</h3>
+            <h3>Top ${destLimit} Export Destinations (${latestYear})</h3>
             <p class="block-sub">Click any country row to filter the scorecard above.</p>
           </div>
           ${
@@ -261,7 +268,7 @@ function renderScorecardTab(data) {
               <tr>
                 <th>#</th>
                 <th>Destination</th>
-                <th class="num">2025 Exports</th>
+                <th class="num">${latestYear} Exports</th>
                 <th class="num">Share</th>
                 <th class="num">YoY</th>
                 <th class="num">5-Yr</th>
@@ -274,8 +281,8 @@ function renderScorecardTab(data) {
                   <tr class="is-clickable ${state.destinationCode === d.code ? 'is-selected' : ''}" data-select-dest="${esc(d.code)}">
                     <td class="rank-cell">${idx + 1}</td>
                     <td class="country-name">${esc(d.name)}</td>
-                    <td class="num">${esc(formatMoney(d.byYear['2025']))}</td>
-                    <td class="num">${d.share2025Pct.toFixed(1)}%</td>
+                    <td class="num">${esc(formatMoney(d.byYear[latestYear]))}</td>
+                    <td class="num">${d.shareLatestPct.toFixed(1)}%</td>
                     <td class="num ${pctClass(d.yoyPct)}">${esc(formatPct(d.yoyPct))}</td>
                     <td class="num ${pctClass(d.chg5yPct)}">${esc(formatPct(d.chg5yPct))}</td>
                   </tr>`
@@ -289,7 +296,7 @@ function renderScorecardTab(data) {
       <div>
         <div class="block-head">
           <div>
-            <h3>U.S. Customs Districts (2025)</h3>
+            <h3>U.S. Customs Districts (${latestYear})</h3>
             <p class="block-sub">Primary U.S. ports and border crossings shipping ${esc(data.name.toLowerCase())}.</p>
           </div>
         </div>
@@ -297,12 +304,12 @@ function renderScorecardTab(data) {
           ${data.districts
             .slice(0, 10)
             .map((dist, idx) => {
-              const pctW = Math.max(2, (dist.value2025 / maxDistrict) * 100);
+              const pctW = Math.max(2, (dist.valueLatest / maxDistrict) * 100);
               return `
                 <div>
                   <div class="bar-row-top">
                     <span class="bar-label">${esc(dist.name)}</span>
-                    <span class="bar-val">${esc(formatMoney(dist.value2025))} (${dist.share2025Pct.toFixed(1)}%)</span>
+                    <span class="bar-val">${esc(formatMoney(dist.valueLatest))} (${dist.shareLatestPct.toFixed(1)}%)</span>
                   </div>
                   <div class="bar-track">
                     <div class="bar-fill ${idx === 0 ? 'is-amber' : ''}" style="width:${pctW.toFixed(1)}%"></div>
@@ -512,7 +519,7 @@ function render() {
       state.data.destinations
         .map(
           (d) =>
-            `<option value="${esc(d.code)}" ${state.destinationCode === d.code ? 'selected' : ''}>${esc(d.name)} (${esc(formatMoney(d.byYear['2025']))})</option>`
+            `<option value="${esc(d.code)}" ${state.destinationCode === d.code ? 'selected' : ''}>${esc(d.name)} (${esc(formatMoney(d.byYear[state.data.latestYear]))})</option>`
         )
         .join('')
     : `<option value="">All destinations</option>`;
@@ -552,7 +559,7 @@ function render() {
                 <span class="hero-qa-q">${esc(item.q)}</span>
                 ${CHEVRON_DOWN}
               </summary>
-              <p class="hero-qa-a">${esc(item.a)}</p>
+              <p class="hero-qa-a">${esc(typeof item.a === 'function' ? item.a(state.data) : item.a)}</p>
             </details>`
           ).join('')}
         </div>
@@ -729,7 +736,7 @@ function bindEvents() {
 
   app.querySelector('[data-action="download-csv"]')?.addEventListener('click', () => {
     if (!state.data) return;
-    downloadBlob(buildScorecardCsv(state.data), `us-exports-${state.data.id}-2021-2026.csv`, 'text/csv;charset=utf-8');
+    downloadBlob(buildScorecardCsv(state.data), `us-exports-${state.data.id}-${state.data.years[0]}-${state.data.ytdYear}.csv`, 'text/csv;charset=utf-8');
   });
 
   app.querySelector('[data-action="download-svg"]')?.addEventListener('click', () => {
