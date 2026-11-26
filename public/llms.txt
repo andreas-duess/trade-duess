@@ -1,0 +1,33 @@
+# U.S. Ag Export Scorecard & Untapped Markets (trade.duess.com)
+
+> Free, zero-login U.S. agricultural export scorecard and untapped global import market finder built for USDA FAS cooperators, USAEDC members, state regional trade groups, and U.S. ag exporters by Duess Strategies Inc.
+
+## What It Does
+
+1. **Export Scorecard (`01 · Export Scorecard`):** Instant 5-year U.S. export totals (2021-2025), latest year-to-date (YTD) momentum, top destination markets, and U.S. customs district breakdowns for 24 curated USAEDC cooperator commodity baskets. Includes one-click "Copy table for PowerPoint / UES", CSV download, and SVG chart export.
+2. **Untapped Import Markets (`02 · Untapped Markets`):** Interactive bubble chart comparing 2024 global import market size (or 4-year import growth, 2020-2024) against current U.S. market share from UN ComTrade, highlighting large or fast-growing import markets where U.S. share sits below a configurable threshold alongside the top global rival exporting countries.
+
+## Data Sources & Freshness
+
+- **U.S. Exports:** Official U.S. Census Bureau International Trade API (the same upstream dataset that feeds USDA FAS GATS). Refreshes automatically on the 10th of every month via GitHub Actions, auto-detecting the latest published monthly release.
+- **Global Imports & Rival Exporters:** Official UN ComTrade annual HS data (2020 and 2024).
+
+## 24 Covered Cooperator Commodity Baskets
+
+Almonds, Walnuts, Pistachios, Pecans, Beef & Beef Offal, Pork, Poultry, Dairy Products, Soybeans, Corn (Maize), Wheat, Rice, Sorghum, Pulses (Dry Peas & Lentils), Peanuts, Apples & Pears, Table Grapes, Wine, Cotton, Hardwood Lumber, Softwood Lumber, Dog & Cat Food, Bovine Genetics (Semen), and Cranberries & Blueberries.
+
+## Direct Deep Links
+
+- Default scorecard: https://trade.duess.com/
+- Filter by commodity: `https://trade.duess.com/?commodity=almonds` (or `walnuts`, `rice`, `beef`, `pork`, `dairy`, `soybeans`, `corn`, `wheat`, `wine`, etc.)
+- Open Untapped Markets directly: `https://trade.duess.com/?commodity=walnuts&tab=whitespace`
+
+## Related Free USAEDC Tools by Duess Strategies
+
+- [AI for FAS Cooperators & USAEDC Members](https://duess.com/for-usaedc-members/)
+- [Global Ag Trade Show Map & 2027 Calendar](https://events.duess.com/)
+- [UES Copy-Forward Checker](https://ues-checker.duess.com/)
+- [One-Page FAS AI Policy Generator](https://duess.com/ai-policy/#fas)
+- [AI Workflow Worksheet](https://duess.com/worksheet/)
+
+Publisher: Duess Strategies Inc. (Andreas Duess) — https://duess.com/ — andreas@duess.com
